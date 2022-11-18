@@ -1,0 +1,34 @@
+Investor Forum Website Proposal
+
+    Independent investors need a website that they can use to get investment ideas and refine investment 
+methodology. This site would allow investors to communicate with each other and get stock market information 
+via an API. This site will mostly be used by new investors, but also some experienced investors interested 
+in spreading their wisdom. Features of the website will include user registry and login, mock stock portfolios,
+and message board posting.
+
+    The user registration form will be created in WTForms and include a username, password, re-enter password, 
+and email. This information will be sent to a users table in the investor database. The password will be 
+encrypted using Bcrypt. A separate login form will also be created which will include username and password.
+Logins will be handled using session data. Users will also have a feature to view their profile page and delete
+their account.
+
+    On the user's profile page, they have the ability to create a mock stock portfolio. The user will request
+data for the portfolio via a form created with WTForms. The data will be retried from Alpha Advantage API via
+python. I have already acquired an Alpha Advantage API key and have tested API requests using insomnia. The
+API docks include python specific instructions. The mock API will be based on historical data, so the user will
+pick a start date and end date for each stock within the API. Stock data from Alpha Advantage goes back 20 years,
+so that will be a limitation. The website will display data on each stock as well as initial investment amount
+and ending investment value. Portfolio entries will be saved in the database under a portfolios table. The table
+will include id, user_id, name, symbol, start_date, end_date, start_price, end_price. The user_id column will
+be linked with the user table with a foriegn key.
+
+    There will also be a page on the website where users can read and make posts. I am hoping to also add a
+feature where users can post stock market data within their posts, though I'm still thinking through how that 
+will work. Forum posts will be stored in the database with a table called posts. The table will include id, 
+user_id, and message. (perhaps another column or two if I figure out adding stock market data) The user_id
+column will be linked with user table with a foriegn key.
+
+    If I have more time, I'd like to also add some investment tools for the mock portfolio. Something like
+periodic investment amounts, withdrawals, rebalancing, etc. Those features may require additional API calls.
+
+

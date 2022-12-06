@@ -1,0 +1,16 @@
+label {
+    color: #73F59B;
+}
+
+.text {
+    color: #73F59B;
+}
+
+#search-button {
+    display: inline-block;
+}
+
+.card-image {
+    width: 280px;
+    height: 280px;
+}

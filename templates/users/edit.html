@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-7 col-lg-5">
+    <h2 style="color: #73F59B;">Edit {{ user.username }}'s Profile</h2>
+    <form method="POST" id="user_form">
+      {{ form.hidden_tag() }}
+
+      {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+        <p>
+          {% if field.name == 'bio' %}
+          {{ field.label}} {{ field(rows='4',cols='60') }}
+          {% else %}
+          {{ field.label }} {{ field(size=50) }}
+          {% endif %}
+          {% for error in field.errors %}
+          
+          <em class="error">{{ error }}</em>
+          
+          {% endfor %}
+        </p>
+      {% endfor %}
+
+      <p class="text">To confirm changes, enter your password:</p>
+      {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          <span class="text-danger">
+          {{ error }}
+        </span>
+        {% endfor %}
+      {% endif %}
+      <p>
+      {{ form.password.label }}
+      {{ form.password(size=50) }}
+      </p>
+
+      <button class="btn btn-primary btn-lg btn-block">
+        <i class="fa-solid fa-user-pen" style="font-size: 2em; color: white;"></i>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

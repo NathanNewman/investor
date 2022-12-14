@@ -55,7 +55,7 @@
               <a
                 class="nav-link active"
                 aria-current="page"
-                href="/user/{{ g.user }}"
+                href="/user/{{ g.user.id }}"
               >
                 <i
                   class="fa-solid fa-id-card"
@@ -64,7 +64,11 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="/portfolios/new"
+              >
                 <i
                   class="fa-solid fa-money-bill-trend-up"
                   style="font-size: 2.5rem; color: #73f59b"
@@ -156,5 +160,8 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <script src="/static/script.js"></script>
   </body>
 </html>

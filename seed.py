@@ -1,4 +1,4 @@
-from models import db, User 
+from models import db, Stock, Portfolio, User 
 
 db.drop_all()
 db.create_all()

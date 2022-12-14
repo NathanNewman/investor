@@ -10,7 +10,29 @@
       <p>{{ user.bio }}</p>
     </div>
     <div class="col-12 col-md-6">
+      <h3>Add Portfolio</h3>
+      <form
+        action="/user/create-portfolio"
+        name="create-portfolio"
+        method="post"
+        id="create-portfolio"
+      >
+        <input type="text" name="portfolio-name"/>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-regular fa-folder-plus"></i>
+        </button>
+      </form>
       <h2>Portfolios</h2>
+      <ul>
+      {% for portfolio in portfolios %}
+        <li>{{ portfolio.name }} 
+          <a class="nav-link active" aria-current="page" href="/portfolios/{{ portfolio.id }}">
+          <i class="fa-solid fa-money-bill-trend-up" style="font-size: 2.5rem; color: #73f59b">
+          </i>
+        </a><p class="date">{{ portfolio.created_at }}</p></li>
+      {% endfor %}
+      </ul>
+      
     </div>
   </div>
 </div>

@@ -8,12 +8,14 @@ $(".quantity").on("input", function (event) {
   let newTotal = stockTotal - total;
   let cash = $("#dollars").val();
   let dollars = Math.floor((cash - newTotal) * 100) / 100;
-  return $("#dollars").val(dollars);
+  $("#dollars").val(dollars);
+  $("#cash").text(`Cash: ${dollars}`);
+  return dollars;
 });
 
 function stockMath(symbol, quantity, price) {
   let total = Math.floor(quantity * price * 100) / 100;
   $(`#${symbol}-hiddenTotal`).val(total);
-  $(`#${symbol}-total`).html(`Total: ${total}`);
+  $(`#${symbol}-total`).text(`${total}`);
   return total;
 }

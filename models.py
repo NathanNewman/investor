@@ -44,7 +44,7 @@ class Portfolio(db.Model):
         default=datetime.datetime.now
     )
     cash = db.Column(
-        db.Integer,
+        db.Float,
         nullable=False,
         default=10000
     )

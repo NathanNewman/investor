@@ -15,18 +15,7 @@
     color:darkgrey;
 }
 
-form  {
-    display: table;
-}
-form > p {
-    display: table-row;
-    margin:auto;
-}
-form > label { 
-    display: table-cell;
-    color:black;
-    
-}
-form > input { 
-    display: table-cell;
+#port-table > tbody > tr > td {
+    min-width: 100px;
+    max-width: 100px;
 }

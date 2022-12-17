@@ -123,8 +123,6 @@ def user_profile(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    user_id = ''.join(filter(str.isdigit, user_id))
-    user_id = int(user_id)
     user = User.query.get_or_404(user_id)
     portfolios = Portfolio.query.filter(Portfolio.user_id == user_id)
     return render_template('/users/profile.html', user=user, portfolios=portfolios)
@@ -198,7 +196,7 @@ def new_portfolio():
 
 
 @app.route('/portfolios/<int:port_id>')
-def portfolio_edit(port_id):
+def portfolio(port_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -207,6 +205,24 @@ def portfolio_edit(port_id):
     portfolio = Portfolio.query.get_or_404(port_id)
 
     return render_template('/portfolios/portfolio.html', portfolio=portfolio)
+
+
+@app.route('/portfolios/<int:port_id>/edit', methods=["POST"])
+def edit_portfolio(port_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    portfolio = Portfolio.query.get_or_404(port_id)
+
+    portfolio.cash = request.form["cash"]
+
+    for stock in portfolio.stocks:
+        stock.quantity = request.form[f"{stock.symbol}"]
+
+    db.session.commit()
+    return redirect(f"/user/{g.user.id}")
 
 
 @app.route('/portfolios/get-stock', methods=["POST"])

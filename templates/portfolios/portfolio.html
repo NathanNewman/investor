@@ -52,8 +52,9 @@
                 <b id="{{ stock.symbol }}-total">{{ stock.quantity * stock.price}}</b>
                 <input
                   type="hidden"
+                  class="total"
                   id="{{ stock.symbol }}-hiddenTotal"
-                  value="0"
+                  value="{{ stock.quantity * stock.price }}"
                 />
               </td>
             </tr>

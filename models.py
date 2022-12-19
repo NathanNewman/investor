@@ -1,6 +1,8 @@
 import datetime
+import requests
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from key import api_key, api_url, api_query
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -27,6 +29,18 @@ class Stock(db.Model):
         db.Integer,
         db.ForeignKey('portfolios.id', ondelete='cascade')
     )
+
+    def update(self):
+        symbol = self.symbol
+
+        url = api_url + symbol + api_query + api_key
+        r = requests.get(url)
+        data = r.json()
+        gq = data["Global Quote"]
+        price = gq["05. price"]
+        self.price = price
+        db.session.commit()
+        return price
 
 
 class Portfolio(db.Model):

@@ -203,6 +203,8 @@ def portfolio(port_id):
         return redirect("/")
 
     portfolio = Portfolio.query.get_or_404(port_id)
+    for stock in portfolio.stocks:
+        stock.update()
 
     return render_template('/portfolios/portfolio.html', portfolio=portfolio)
 

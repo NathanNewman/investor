@@ -16,9 +16,9 @@ $(".quantity").on("input", function (event) {
     return window.alert("Cash cannot be less than zero");
   }
   $(`#${symbol}-hiddenTotal`).val(stockTotal);
-  $(`#${symbol}-total`).text(`${stockTotal}`);
+  $(`#${symbol}-total`).text(`$${stockTotal}`);
   $("#dollars").val(dollars);
-  $("#cash").text(`Cash: ${dollars}`);
+  $("#cash").text(`Cash: $${dollars}`);
   return dollars;
 });
 

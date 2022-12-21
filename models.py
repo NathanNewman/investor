@@ -104,12 +104,12 @@ class Portfolio(db.Model):
                              cascade='all, delete-orphan')
 
     def update_net_worth(self):
-        cash = float(self.cash)
+        total = float(self.cash)
         for stock in self.stocks:
             stock.update()
             quantity = stock.quantity
             price = stock.price
-            total = cash + (quantity * price)
+            total = total + (quantity * price)
         self.net_worth = round(total, 2)
         db.session.commit()
         return round(total, 2)
@@ -148,7 +148,7 @@ class User(db.Model):
 
     image_url = db.Column(
         db.Text,
-        default="/static/images/default-pic.png"
+        default="https://media.istockphoto.com/id/1209654046/vector/user-avatar-profile-icon-black-vector-illustration.jpg?s=612x612&w=0&k=20&c=EOYXACjtZmZQ5IsZ0UUp1iNmZ9q2xl1BD1VvN6tZ2UI="
     )
 
     bio = db.Column(

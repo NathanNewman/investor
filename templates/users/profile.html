@@ -48,6 +48,7 @@
       </div>
     </div>
     <div class="col-12 col-md-6" style="color: #73f59b">
+      {% if user.id == g.user.id %}
       <h3>Add Portfolio</h3>
       <form
         action="/user/create-portfolio"
@@ -56,10 +57,11 @@
         id="create-portfolio"
       >
         <input type="text" name="portfolio-name" />
-        <button type="submit" class="btn btn-primary">
-          <i class="fa-regular fa-folder-plus"></i>
+        <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="Add Portfolio">
+          <i class="fa-solid fa-plus"></i>
         </button>
       </form>
+      {% endif %}
       <table id="profile-portfolios">
         <th>
           <tr>

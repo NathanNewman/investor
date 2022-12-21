@@ -51,8 +51,8 @@
 }
 
 #port-table > tbody > tr > td {
-    min-width: 75px;
-    max-width: 75px;
+    min-width: 85px;
+    max-width: 85px;
 }
 
 #portfolio {

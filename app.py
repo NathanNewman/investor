@@ -110,7 +110,6 @@ def redirect_about():
 
 @app.route('/about')
 def about():
-    render_template('/base.html')
     return render_template('/about.html')
 
 
@@ -129,7 +128,7 @@ def user_profile(user_id):
     return render_template('/users/profile.html', user=user, portfolios=portfolios)
 
 
-@app.route('/user/edit/<int:user_id>', methods=["GET", "POST"])
+@app.route('/user/<int:user_id>/edit', methods=["GET", "POST"])
 def edit_profile(user_id):
 
     if not g.user:
@@ -142,15 +141,15 @@ def edit_profile(user_id):
     form = EditUserForm(obj=user)
 
     if form.validate_on_submit():
+        user.id = user_id
+        user.email = form.email.data
+        user.username = form.username.data
+        user.image_url = form.image_url.data
+        user.bio = form.bio.data
         try:
             User.authenticate(form.username.data, form.password.data)
-            user.id = user_id
-            user.email = form.email.data
-            user.username = form.username.data
-            user.image_url = form.image_url.data
-            user.bio = form.bio.data
             db.session.commit()
-            return redirect('/')
+            return redirect(f'/user/{user_id}')
 
         except IntegrityError:
             flash("Username already taken")
@@ -184,9 +183,7 @@ def delete_user(user_id):
     for portfolio in user.portfolios:
         for stock in portfolio.stocks:
             db.session.delete(stock)
-        db.session.commit()
         db.session.delete(portfolio)
-    db.session.commit()
     db.session.delete(user)
     db.session.commit()
     return redirect('/')
@@ -305,7 +302,6 @@ def delete_portfolio(port_id):
 
     for stock in portfolio.stocks:
         db.session.delete(stock)
-    db.session.commit()
 
     db.session.delete(portfolio)
     db.session.commit()

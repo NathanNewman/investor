@@ -18,13 +18,19 @@ class Stock(db.Model):
     )
     price = db.Column(
         db.Float,
-        nullable=False
+        nullable=False,
+        default=0.00
     )
     quantity = db.Column(
         db.Integer,
         nullable=False,
         default=0
     )
+    update_date = db.Column(
+        db.Date,
+        nullable=True
+    )
+
     portfolio_id = db.Column(
         db.Integer,
         db.ForeignKey('portfolios.id', ondelete='cascade')
@@ -32,15 +38,35 @@ class Stock(db.Model):
 
     def update(self):
         symbol = self.symbol
-
+        today = datetime.date.today()
+        if self.update_date == today:
+            return self.price
         url = api_url + symbol + api_query + api_key
         r = requests.get(url)
         data = r.json()
         gq = data["Global Quote"]
         price = gq["05. price"]
-        self.price = price
+        stocks = Stock.query.filter_by(symbol=symbol)
+        for stock in stocks:
+            stock.price = price
+            stock.update_date = today
         db.session.commit()
         return price
+
+    @classmethod
+    def updated_stocks(cls):
+        today = datetime.date.today()
+        stocks = cls.query.filter_by(update_date=today)
+        symbols = []
+        for stock in stocks:
+            symbols.append(stock.symbol)
+        symbols = set(symbols)
+        updated_stocks = []
+        for symbol in symbols:
+            stock = cls.query.filter_by(symbol=symbol).limit(1)
+            updated_stocks.append(stock[0])
+        print(updated_stocks)
+        return updated_stocks
 
 
 class Portfolio(db.Model):
@@ -62,6 +88,13 @@ class Portfolio(db.Model):
         nullable=False,
         default=10000
     )
+
+    net_worth = db.Column(
+        db.Float,
+        nullable=False,
+        default=10000
+    )
+
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete='cascade')
@@ -69,6 +102,22 @@ class Portfolio(db.Model):
 
     stocks = db.relationship('Stock', backref='portfolios',
                              cascade='all, delete-orphan')
+
+    def update_net_worth(self):
+        cash = float(self.cash)
+        for stock in self.stocks:
+            stock.update()
+            quantity = stock.quantity
+            price = stock.price
+            total = cash + (quantity * price)
+        self.net_worth = round(total, 2)
+        db.session.commit()
+        return round(total, 2)
+
+    def friendly_date(self):
+        date = self.created_at
+        friendly = date.strftime("%b %d, %Y")
+        return friendly
 
 
 class User(db.Model):
@@ -106,7 +155,8 @@ class User(db.Model):
         db.Text
     )
 
-    portfolios = db.relationship('Portfolio', backref='users', cascade='all, delete-orphan')
+    portfolios = db.relationship(
+        'Portfolio', backref='users', cascade='all, delete-orphan')
 
     @staticmethod
     def encrypt_password(password):

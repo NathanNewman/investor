@@ -62,7 +62,7 @@ db.session.add_all([u1, u2, u3, u4, u5, u6])
 db.session.commit()
 
 port1 = Portfolio(
-    name="rabit",
+    name="rabbit",
     user_id=1,
     cash=79.36,
     created_at=datetime(2022, 5, 6, 8, 10, 10, 10)

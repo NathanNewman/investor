@@ -43,7 +43,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 m-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/about">
+              <a class="nav-link active" aria-current="page" href="/about" data-toggle="tooltip" title="About">
                 <i
                   class="fa-solid fa-circle-info"
                   style="font-size: 2.5rem; color: #73f59b"
@@ -56,45 +56,24 @@
                 class="nav-link active"
                 aria-current="page"
                 href="/user/{{ g.user.id }}"
+                data-toggle="tooltip" title="Profile"
               >
                 <i
                   class="fa-solid fa-id-card"
-                  style="font-size: 2.5rem; color: #73f59b"
-                ></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="/portfolios/new"
-              >
-                <i
-                  class="fa-solid fa-money-bill-trend-up"
                   style="font-size: 2.5rem; color: #73f59b"
                 ></i>
               </a>
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
                 <i
                   class="fa-solid fa-id-card"
                   style="font-size: 2.5rem; color: #c9c9c9"
                 ></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
-                <i
-                  class="fa-solid fa-money-bill-trend-up"
-                  style="font-size: 2.5rem; color: #c9c9c9"
-                ></i>
-              </a>
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <a class="nav-link active" aria-current="page" href="/portfolios/leaderboard" data-toggle="tooltip" title="Leader Board">
                 <i
                   class="fa-solid fa-trophy"
                   style="font-size: 2.5rem; color: #73f59b"
@@ -113,7 +92,7 @@
               </form>
             </li>
             <li>
-              <button class="btn btn-default" form="search">
+              <button class="btn btn-default" form="search" data-toggle="tooltip" title="Search">
                 <i
                   class="fa-solid fa-magnifying-glass"
                   style="font-size: 2.5rem; color: #73f59b"
@@ -124,7 +103,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
               {% if g.user %}
-              <a class="nav-link active" aria-current="page" href="/logout">
+              <a class="nav-link active" aria-current="page" href="/logout" data-toggle="tooltip" title="Logout">
                 <i
                   class="fa-solid fa-right-from-bracket"
                   style="font-size: 2.5em; color: #73f59b"
@@ -132,7 +111,7 @@
                 </i>
               </a>
               {% else %}
-              <a class="nav-link active" aria-current="page" href="/login">
+              <a class="nav-link active" aria-current="page" href="/login" data-toggle="tooltip" title="Login">
                 <i
                   class="fa-solid fa-right-to-bracket"
                   style="font-size: 2.5em; color: #73f59b"
@@ -142,7 +121,7 @@
               {% endif %}
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/signup">
+              <a class="nav-link active" aria-current="page" href="/signup" data-toggle="tooltip" title="Signup">
                 <i
                   class="fa-solid fa-user-plus"
                   style="font-size: 2.5em; color: #73f59b"

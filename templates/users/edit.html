@@ -1,27 +1,58 @@
 {% extends 'base.html' %} {% block content %}
-<h2 style="color: #73f59b">Edit {{ user.username }}'s Profile</h2>
-<form method="POST" id="edit-form">
-  {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
-  'hidden' and field.name != 'password' %}
-  <p>
-    {% if field.name == 'bio' %} {{ field.label(style="color:#73F59B;") }} {{ field(rows='4',cols='30')
-    }} {% else %} {{ field.label(style="color:#73F59B;") }} {{ field( size=30) }} {% endif %} {% for
-    error in field.errors %}
+<table style="margin:auto;">
+  <th>
+    <tr>
+      <td colspan="2">
+        <h2 style="color: #73f59b">Edit {{ user.username }}'s Profile</h2>
+      </td>
+    </tr>
+  </th>
+  <tbody>
+    <form method="POST" id="edit-form">
+      {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+      'hidden' and field.name != 'password' %}
+      <tr>
+        {% if field.name == 'bio' %}
+        <td>{{ field.label(style="color:#73F59B;") }}</td>
+        <td>{{ field(rows='4',cols='30') }}</td>
+        {% else %}
+        <td>{{ field.label(style="color:#73F59B;") }}</td>
+        <td>{{ field( size=30) }}</td>
+      </tr>
+      {% endif %} {% for error in field.errors %}
+      <tr>
+        <td colspan="2">
+          <em class="error">{{ error }}</em>
+        </td>
+      </tr>
 
-    <em class="error">{{ error }}</em>
+      {% endfor %} {% endfor %}
+      <tr>
+        <td colspan="2" style="color:#73f59b;">To confirm changes, enter your password:</td>
+      </tr>
+      <tr>
+        <td>{{ form.password.label(style="color:#73F59B;") }}</td>
+        <td>{{ form.password(size=50) }}</td>
+      </tr>
+      {% if form.password.errors %} {% for error in form.password.errors %}
+      <tr>
+        <td colspan="2">
+          <span class="text-danger"> {{ error }} </span>
+        </td>
+      </tr>
+      {% endfor %} {% endif %}
 
-    {% endfor %}
-  </p>
-  {% endfor %}
-
-  <p class="text">To confirm changes, enter your password:</p>
-  {% if form.password.errors %} {% for error in form.password.errors %}
-  <span class="text-danger"> {{ error }} </span>
-  {% endfor %} {% endif %}
-  <p>{{ form.password.label(style="color:#73F59B;") }} {{ form.password(size=50) }}</p>
-
-  <button class="btn btn-primary btn-lg btn-block">
-    <i class="fa-solid fa-user-pen" style="font-size: 2em; color: white"></i>
-  </button>
-</form>
+      <tr>
+        <td>
+          <button class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" title="Submit">
+            <i
+              class="fa-solid fa-user-pen"
+              style="font-size: 2em; color: white"
+            ></i>
+          </button>
+        </td>
+      </tr>
+    </form>
+  </tbody>
+</table>
 {% endblock %}

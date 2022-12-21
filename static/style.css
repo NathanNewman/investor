@@ -19,3 +19,66 @@
     min-width: 100px;
     max-width: 100px;
 }
+
+#leaderboard {
+    color:#73F59B;
+    margin: auto;
+}
+
+.rank {
+    min-width: 75px;
+    max-width: 75px;
+}
+
+.port-name {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.start-date {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.value {
+    min-width: 75px;
+    max-width: 75px;
+}
+
+#port-table {
+    color:#73F59B;
+    margin: auto;
+}
+
+#port-table > tbody > tr > td {
+    min-width: 75px;
+    max-width: 75px;
+}
+
+#portfolio {
+    color:#73F59B;
+    margin: auto;
+}
+
+#portfolio > tbody > tr > td {
+    min-width: 125px;
+    max-width: 125px;
+}
+
+#porfile-portfolios {
+    margin: auto;
+}
+
+#profile-portfolios > tbody > tr > td {
+    min-width: 125px;
+    max-width: 125px;
+}
+
+#updated-stocks {
+    margin: auto;
+}
+
+#updated-stocks > tbody > tr > td {
+    min-width: 75px;
+    max-width: 75px;
+}

@@ -1,15 +1,53 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container w-75 text-center" style="background-color: white">
+<div class="container w-75 text-center">
   <div class="row align-items-center">
     <div class="col-12 col-md-6">
-      <h2>{{ user.username }}'s Information</h2>
-      <a class="nav-link active" aria-current="page" href="/user/edit/{{ user.id }}">
-        <i class="fa-solid fa-user-pen" style="font-size: 2.5em"></i>
-      </a>
-      <img src="{{ user.image_url }}" class="img-fluid" alt="..." />
-      <p>{{ user.bio }}</p>
+      <div class="card" style="width: 18rem; background-color: lightgray">
+        <img
+          class="card-image"
+          src="{{ user.image_url }}"
+          class="card-img-top"
+          alt="..."
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ user.username }}</h5>
+          <p class="card-text">{{ user.bio }}</p>
+          {% if user.id == g.user.id %}
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <a
+                    href="/user/{{ user.id }}/edit"
+                    class="btn btn-primary"
+                    data-toggle="tooltip"
+                    title="Edit Profile"
+                    ><i
+                      class="fa-solid fa-id-card"
+                      style="font-size: 2.5rem; color: #73f59b"
+                    ></i
+                  ></a>
+                </td>
+                <td>
+                  <a
+                    href="/user/{{ user.id }}/delete"
+                    class="btn btn-danger"
+                    data-toggle="tooltip"
+                    title="Delete Profile"
+                    ><i
+                      class="fa-solid fa-id-card"
+                      style="font-size: 2.5rem; color: #73f59b"
+                    ></i
+                  ></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-6" style="color: #73f59b">
       <h3>Add Portfolio</h3>
       <form
         action="/user/create-portfolio"
@@ -17,22 +55,55 @@
         method="post"
         id="create-portfolio"
       >
-        <input type="text" name="portfolio-name"/>
+        <input type="text" name="portfolio-name" />
         <button type="submit" class="btn btn-primary">
           <i class="fa-regular fa-folder-plus"></i>
         </button>
       </form>
-      <h2>Portfolios</h2>
-      <ul>
-      {% for portfolio in portfolios %}
-        <li>{{ portfolio.name }} 
-          <a class="nav-link active" aria-current="page" href="/portfolios/{{ portfolio.id }}">
-          <i class="fa-solid fa-money-bill-trend-up" style="font-size: 2.5rem; color: #73f59b">
-          </i>
-        </a><p class="date">{{ portfolio.created_at }}</p></li>
-      {% endfor %}
-      </ul>
-      
+      <table id="profile-portfolios">
+        <th>
+          <tr>
+            <td colspan="3">
+              <h2>Portfolios</h2>
+            </td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>Date Created</td>
+          </tr>
+        </th>
+        <tbody>
+          {% for portfolio in portfolios %}
+          <tr>
+            <td>{{ portfolio.name }}</td>
+            <td>{{ portfolio.friendly_date() }}</td>
+            <td>
+              {% if user.id == g.user.id %}
+              <a
+                href="/portfolios/{{ portfolio.id }}/edit"
+                data-toggle="tooltip"
+                title="Edit Portfolio"
+              >
+                <i
+                  class="fa-solid fa-money-bill-trend-up"
+                  style="font-size: 2em; color: #73f59b"
+                >
+                </i>
+              </a>
+              {% else %}
+              <a
+                href="/portfolios/{{ portfolio.id }}"
+                data-toggle="tooltip"
+                title="View Portfolio"
+              >
+                <i class="fa-solid fa-binoculars"></i>
+              </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

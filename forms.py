@@ -14,8 +14,8 @@ class LoginForm(FlaskForm):
     """Login Form"""
 
     username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6), EqualTo('confirm', message="Passwords must match")])
-    confirm = PasswordField('Confirm Password', validators=[Length(min=6)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+
 
 class EditUserForm(FlaskForm):
     """Form for editing user data"""

@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+<table id="leaderboard" style="color: #73f59b">
+  <th>
+    <tr>
+      <td colspan="4" style="text-align: center"><h2>Leader Board</h2></td>
+    </tr>
+    <tr>
+      <td class="rank">Rank</td>
+      <td>Name</td>
+      <td class="start-date">Start Date</td>
+      <td>Value</td>
+    </tr>
+  </th>
+  <tbody>
+    {% for portfolio in portfolios %}
+    <tr>
+      <td class="rank">{{ loop.index }}</td>
+      <td class="port-name">{{ portfolio.name }}</td>
+      <td class="start-date">{{ portfolio.friendly_date() }}</td>
+      <td class="value">{{ "$%.2f"|format(portfolio.net_worth) }}</td>
+      <td>
+        <a href="/portfolios/{{ portfolio.id }}" data-toggle="tooltip" title="View Portfolio">
+          <i class="fa-solid fa-binoculars"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

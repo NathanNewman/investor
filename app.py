@@ -1,5 +1,6 @@
 import os
 import requests
+import datetime
 
 from flask import Flask, render_template, redirect, session, g, flash, request
 from flask_debugtoolbar import DebugToolbarExtension
@@ -18,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 toolbar = DebugToolbarExtension(app)
 
@@ -104,7 +105,7 @@ def signup():
 
 @app.route('/')
 def redirect_about():
-    return redirect('/about')
+    return redirect('/portfolios/leaderboard')
 
 
 @app.route('/about')
@@ -171,6 +172,25 @@ def search_users():
 
     return render_template('users/search.html', users=users)
 
+
+@app.route('/user/<int:user_id>/delete')
+def delete_user(user_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    for portfolio in user.portfolios:
+        for stock in portfolio.stocks:
+            db.session.delete(stock)
+        db.session.commit()
+        db.session.delete(portfolio)
+    db.session.commit()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect('/')
+
 ###############################################################################################################
 # Portfolios and Stocks
 
@@ -198,33 +218,40 @@ def new_portfolio():
 @app.route('/portfolios/<int:port_id>')
 def portfolio(port_id):
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
     portfolio = Portfolio.query.get_or_404(port_id)
-    for stock in portfolio.stocks:
-        stock.update()
-
     return render_template('/portfolios/portfolio.html', portfolio=portfolio)
 
 
-@app.route('/portfolios/<int:port_id>/edit', methods=["POST"])
+@app.route('/portfolios/<int:port_id>/edit', methods=["GET", "POST"])
 def edit_portfolio(port_id):
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    if request.method == "POST":
+        if not g.user:
+            flash("Access unauthorized.", "danger")
+            return redirect("/")
 
-    portfolio = Portfolio.query.get_or_404(port_id)
+        portfolio = Portfolio.query.get_or_404(port_id)
 
-    portfolio.cash = request.form["cash"]
+        portfolio.cash = request.form["cash"]
 
-    for stock in portfolio.stocks:
-        stock.quantity = request.form[f"{stock.symbol}"]
+        for stock in portfolio.stocks:
+            quantity = request.form[f"{stock.symbol}"]
+            quantity = int(quantity)
+            if quantity == 0:
+                db.session.delete(stock)
+            else:
+                stock.quantity = quantity
 
-    db.session.commit()
-    return redirect(f"/user/{g.user.id}")
+        portfolio.update_net_worth()
+        db.session.commit()
+        return redirect(f'/portfolios/{portfolio.id}/edit')
+
+    else:
+        portfolio = Portfolio.query.get_or_404(port_id)
+        for stock in portfolio.stocks:
+            stock.update()
+        stocks = Stock.updated_stocks()
+        return render_template('/portfolios/edit.html', portfolio=portfolio, stocks=stocks)
 
 
 @app.route('/portfolios/get-stock', methods=["POST"])
@@ -236,24 +263,50 @@ def get_stock():
 
     symbol = request.form['stock-search']
     port_id = request.form['portfolio-id']
-
+    stock = Stock(
+        symbol=symbol,
+        portfolio_id=port_id,
+    )
+    db.session.add(stock)
+    db.session.commit()
     try:
-        url = api_url + symbol + api_query + api_key
-        r = requests.get(url)
-        data = r.json()
-        gq = data["Global Quote"]
-        price = gq["05. price"]
-        stock = Stock(
-            symbol = symbol,
-            price = price,
-            portfolio_id = port_id
-        )
-        db.session.add(stock)
-        db.session.commit()
-        
-        return redirect(f'/portfolios/{port_id}')
-
+        simStock = Stock.query.filter_by(symbol=symbol).first()
+        today = datetime.date.today()
+        if simStock.update_date == today:
+            stock.price = simStock.price
+            stock.update_date = today
+            db.session.commit()
+        else:
+            stock.update()
+        return redirect(f'/portfolios/{port_id}/edit')
     except:
-        flash("Stock symbol does not exist")
-        return redirect(f'/portfolios/{port_id}')
+        stock.update()
+        return redirect(f'/portfolios/{port_id}/edit')
+    finally:
+        flash("stock symbol does not exist")
+        return redirect(f'/portfolios/{port_id}/edit')
 
+
+@app.route("/portfolios/leaderboard")
+def leaderboard():
+    portfolios = Portfolio.query.order_by(
+        Portfolio.net_worth.desc()).limit(10)
+    return render_template('/portfolios/leaders.html', portfolios=portfolios)
+
+
+@app.route("/portfolios/<int:port_id>/delete")
+def delete_portfolio(port_id):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    portfolio = Portfolio.query.get_or_404(port_id)
+
+    for stock in portfolio.stocks:
+        db.session.delete(stock)
+    db.session.commit()
+
+    db.session.delete(portfolio)
+    db.session.commit()
+    return redirect(f"/user/{g.user.id}")

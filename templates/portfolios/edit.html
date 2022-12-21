@@ -1,0 +1,144 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container w-75 text-center" style="background-color: #013110">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-8">
+      <h1 style="color: #73f59b">Portfolio Assets</h1>
+      <form action="/portfolios/{{ portfolio.id }}/edit" method="post">
+        <table id="port-table">
+          <th>
+            <tr>
+              <td colspan="4">
+                <b id="cash">Cash: {{ portfolio.cash }}</b>
+                <input
+                  type="hidden"
+                  id="dollars"
+                  name="cash"
+                  value="{{ portfolio.cash }}"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Symbol</td>
+              <td>Amount</td>
+              <td>Price</td>
+              <td>Total</td>
+            </tr>
+          </th>
+          <tbody>
+            {% for stock in portfolio.stocks %}
+            <tr>
+              <td>
+                <b>{{ stock.symbol }}</b>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  class="quantity"
+                  id="{{ stock.symbol }}"
+                  name="{{ stock.symbol }}"
+                  value="{{ stock.quantity }}"
+                  style="width: 50px"
+                  min="0"
+                />
+              </td>
+              <td>
+                <b>{{ "$%.2f"|format(stock.price) }}</b>
+                <input
+                  type="hidden"
+                  id="{{ stock.symbol }}-price"
+                  name="{{ stock.symbol }}-price"
+                  value="{{ stock.price }}"
+                />
+              </td>
+              <td>
+                <b id="{{ stock.symbol }}-total"
+                  >{{ "$%.2f"|format(stock.quantity * stock.price) }}</b
+                >
+                <input
+                  type="hidden"
+                  class="total"
+                  id="{{ stock.symbol }}-hiddenTotal"
+                  value="{{ stock.quantity * stock.price }}"
+                />
+              </td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="2">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="width: 150px"
+                  data-toggle="tooltip"
+                  title="Submit"
+                >
+                  <i
+                    class="fa-solid fa-money-bill-trend-up"
+                    style="font-size: 2.5rem; color: #73f59b"
+                  ></i>
+                </button>
+              </td>
+              <td colspan="2">
+                <a
+                    href="/portfolios/{{ portfolio.id }}/delete"
+                    class="btn btn-danger"
+                    data-toggle="tooltip"
+                    title="Delete Profile">
+                    <i
+                    class="fa-solid fa-money-bill-trend-up"
+                    style="font-size: 2.5rem; color: #73f59b"
+                  ></i>
+                  </a>
+                  
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div class="col-12 col-md-4" style="color: #73f59b">
+      <h2>Add Stocks</h2>
+      <p>Look up stocks using their symbol and add them to your portfolio.</p>
+      <form
+        action="/portfolios/get-stock"
+        name="stock-search"
+        method="post"
+        id="get-stock"
+      >
+        <input type="text" name="stock-search" />
+        <input type="hidden" name="portfolio-id" value="{{ portfolio.id }}" />
+        <button
+          type="submit"
+          class="btn btn-primary"
+          data-toggle="tooltip"
+          title="Search"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+      <table id="updated-stocks">
+        <th>
+          <tr>
+            <td colspan="2">
+              <h3>Stocks</h3>
+            </td>
+          </tr>
+          <tr>
+            <td>Symbol</td>
+            <td>Price</td>
+          </tr>
+        </th>
+        <tbody>
+          {% for stock in stocks %}
+          <tr>
+            <td>{{ stock.symbol }}</td>
+            <td>{{ stock.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

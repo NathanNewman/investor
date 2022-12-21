@@ -3,12 +3,12 @@
   <div class="row">
     {% for user in users %}
     <div class="col-lg-4 col-md-6 col-sm-12">
-      <div class="card" style="width: 18rem">
+      <div class="card" style="width: 18rem; background-color: lightgray">
         <img class="card-image" src="{{ user.image_url }}" class="card-img-top" alt="..." />
         <div class="card-body">
           <h5 class="card-title">{{ user.username }}</h5>
           <p class="card-text">{{ user.bio }}</p>
-          <a href="/user/{{ user.id }}" class="btn btn-primary"
+          <a href="/user/{{ user.id }}" class="btn btn-primary" data-toggle="tooltip" title="View Profile"
             ><i
               class="fa-solid fa-id-card"
               style="font-size: 2.5rem; color: #73f59b"

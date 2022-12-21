@@ -1,22 +1,42 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row justify-content-md-center">
   <div class="col-md-7 col-lg-5">
-    <h2 style="color: #73F59B;">Login</h2>
-    <form method="POST" id="user_form">
-        {{ form.hidden_tag() }} {% for field in form if
-            field.widget.input_type != 'hidden' %}
-            <p>
-              {{ field.label(style="color:#73F59B;") }} {{ field }} {% for error in field.errors %}
+    <table style="color: #73f59b">
+      <th>
+        <tr>
+          <td colspan="2">
+            <h2>Login</h2>
+          </td>
+        </tr>
+      </th>
+      <tbody>
+        <form method="POST" id="user_form">
+          {{ form.hidden_tag() }} {% for field in form if
+          field.widget.input_type != 'hidden' %}
+          <tr>
+            <td>{{ field.label(style="color:#73F59B;") }}</td>
+            <td>{{ field }}</td>
+            <td>
+              {% for error in field.errors %}
               <em class="error">{{ error }}</em>
-              {% endfor %}
-            </p>
+            </td>
             {% endfor %}
-
-      <button class="btn btn-primary btn-lg btn-block"><i
-        class="fa-solid fa-right-to-bracket"
-        style="font-size: 2em; color: white;">
-      </i></button>
-    </form>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td>
+              <button class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" title="Login">
+                <i
+                  class="fa-solid fa-right-to-bracket"
+                  style="font-size: 2em; color: white"
+                >
+                </i>
+              </button>
+            </td>
+          </tr>
+        </form>
+      </tbody>
+    </table>
   </div>
 </div>
 {% endblock %}

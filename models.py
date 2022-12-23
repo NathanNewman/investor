@@ -1,8 +1,8 @@
+import os
 import datetime
 import requests
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from key import api_key, api_url, api_query
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -37,10 +37,13 @@ class Stock(db.Model):
     )
 
     def update(self):
-        symbol = self.symbol
         today = datetime.date.today()
         if self.update_date == today:
             return self.price
+        api_url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="
+        symbol = self.symbol
+        api_query = "&interval=5min&apikey="
+        api_key = os.environ.get('API_KEY')
         url = api_url + symbol + api_query + api_key
         r = requests.get(url)
         data = r.json()

@@ -8,7 +8,6 @@ from sqlalchemy.exc import IntegrityError
 
 from models import connect_db, User, db, Portfolio, Stock
 from forms import NewUserForm, LoginForm, EditUserForm
-from key import api_key, api_url, api_query
 
 CURR_USER_KEY = "curr_user"
 

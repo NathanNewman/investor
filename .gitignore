@@ -175,3 +175,4 @@ cython_debug/
 
 # API Key
 key.py
+.env.py

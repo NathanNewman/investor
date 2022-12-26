@@ -7,6 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
+db.create_all()
+
 
 class Stock(db.Model):
 

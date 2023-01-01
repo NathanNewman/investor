@@ -1,11 +1,14 @@
+import dotenv
 import os
 import datetime
 import requests
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+dotenv.load_dotenv()
 
 
 

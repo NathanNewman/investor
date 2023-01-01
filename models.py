@@ -50,16 +50,23 @@ class Stock(db.Model):
         api_query = "&interval=5min&apikey="
         api_key = os.environ.get('API_KEY')
         url = api_url + symbol + api_query + api_key
-        r = requests.get(url)
-        data = r.json()
-        gq = data["Global Quote"]
-        price = gq["05. price"]
-        stocks = Stock.query.filter_by(symbol=symbol)
-        for stock in stocks:
-            stock.price = price
-            stock.update_date = today
-        db.session.commit()
-        return price
+        try:
+            r = requests.get(url)
+            data = r.json()
+            gq = data["Global Quote"]
+            price = gq["05. price"]
+            update_date = today
+        except:
+            pricer_stock = Stock.query.filter_by(symbol=symbol).first()
+            price = pricer_stock.price
+            update_date = None
+        finally:
+            stocks = Stock.query.filter_by(symbol=symbol)
+            for stock in stocks:
+                stock.price = price
+                stock.update_date = update_date
+            db.session.commit()
+            return price
 
     @classmethod
     def updated_stocks(cls):

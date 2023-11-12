@@ -45,7 +45,7 @@ class Stock(db.Model):
         today = datetime.date.today()
         if self.update_date == today:
             return self.price
-        api_url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="
+        api_url = os.environ.get('API_URL')
         symbol = self.symbol
         api_query = "&interval=5min&apikey="
         api_key = os.environ.get('API_KEY')
@@ -83,6 +83,27 @@ class Stock(db.Model):
         print(updated_stocks)
         return updated_stocks
 
+    @classmethod
+    def update_all(cls):
+        today = datetime.date.today()
+
+        # Query stocks that haven't been updated today
+        non_updated_stocks = cls.query.filter(cls.update_date != today).all()
+
+        if(len(non_updated_stocks) == 0):
+            return -1
+
+        stocks_to_update = set(non_updated_stocks)
+
+        # Update the stocks (modify this part according to your actual update logic)
+        for stock in stocks_to_update:
+            stock.update()
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        return stocks_to_update
+        
 
 class Portfolio(db.Model):
 

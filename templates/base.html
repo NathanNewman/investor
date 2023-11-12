@@ -48,6 +48,7 @@
                   class="fa-solid fa-circle-info"
                   style="font-size: 2.5rem; color: #73f59b"
                 ></i>
+                <p class="text">About</p>
               </a>
             </li>
             {% if g.user %}
@@ -62,14 +63,18 @@
                   class="fa-solid fa-id-card"
                   style="font-size: 2.5rem; color: #73f59b"
                 ></i>
+                <p class="text">Profile</p>
               </a>
             </li>
             {% else %}
             <li class="nav-item">
+              <span data-toggle="tooltip" title="Login to access">
                 <i
                   class="fa-solid fa-id-card"
-                  style="font-size: 2.5rem; color: #c9c9c9"
+                  style="font-size: 2.5rem; color: #c9c9c9; margin-top: 8px;"
                 ></i>
+                <p class="text">Profile</p>
+              </span>
             </li>
             {% endif %}
             <li class="nav-item">
@@ -78,6 +83,7 @@
                   class="fa-solid fa-trophy"
                   style="font-size: 2.5rem; color: #73f59b"
                 ></i>
+                <p class="text">Leaders</p>
               </a>
             </li>
             <li>
@@ -90,6 +96,7 @@
                   aria-describedby="basic-addon2"
                 />
               </form>
+              <p class="text" id="search-text">Search for user</p>
             </li>
             <li>
               <button class="btn btn-default" form="search" data-toggle="tooltip" title="Search">
@@ -97,6 +104,7 @@
                   class="fa-solid fa-magnifying-glass"
                   style="font-size: 2.5rem; color: #73f59b"
                 ></i>
+                <p class="text">Search</p>
               </button>
             </li>
           </ul>
@@ -109,6 +117,7 @@
                   style="font-size: 2.5em; color: #73f59b"
                 >
                 </i>
+                <p class="text">Logout</p>
               </a>
               {% else %}
               <a class="nav-link active" aria-current="page" href="/login" data-toggle="tooltip" title="Login">
@@ -117,6 +126,7 @@
                   style="font-size: 2.5em; color: #73f59b"
                 >
                 </i>
+                <p class="text">Login</p>
               </a>
               {% endif %}
             </li>
@@ -126,6 +136,7 @@
                   class="fa-solid fa-user-plus"
                   style="font-size: 2.5em; color: #73f59b"
                 ></i>
+                <p class="text">Signup</p>
               </a>
             </li>
           </ul>

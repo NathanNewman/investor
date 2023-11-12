@@ -19,8 +19,8 @@
       <td class="start-date">{{ portfolio.friendly_date() }}</td>
       <td class="value">{{ "$%.2f"|format(portfolio.net_worth) }}</td>
       <td>
-        <a href="/portfolios/{{ portfolio.id }}" data-toggle="tooltip" title="View Portfolio">
-          <i class="fa-solid fa-binoculars"></i>
+        <a class="view-port" href="/portfolios/{{ portfolio.id }}" data-toggle="tooltip" title="View Portfolio">
+          <i class="fa-solid fa-binoculars"></i>view
         </a>
       </td>
     </tr>

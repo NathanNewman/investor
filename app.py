@@ -1,29 +1,47 @@
 import os
-import requests
 import datetime
+import time
 
 from flask import Flask, render_template, redirect, session, g, flash, request
-from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from flask_apscheduler import APScheduler
 
 from models import connect_db, User, db, Portfolio, Stock
 from forms import NewUserForm, LoginForm, EditUserForm
 
 CURR_USER_KEY = "curr_user"
 
+class Config:
+    SCHEDULER_API_ENABLED = True
+
 app = Flask(__name__)
+app.config.from_object(Config())
+scheduler = APScheduler()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///investor'))
+    os.environ.get('DATABASE_URI'))
+scheduler.init_app(app)
+scheduler.start()
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-toolbar = DebugToolbarExtension(app)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
-connect_db(app)
-db.create_all()
+with app.app_context():
+    connect_db(app)
+    db.create_all()
+
+@scheduler.task('cron', id='scheduled_task', hour=0, minute=1)
+def scheduled_task():
+    print("The scheduled task is running")
+    with app.app_context():
+        results = Stock.update_all()
+        if results != -1:
+            for result in results:
+                time.sleep(60)
+                scheduled_task()
+
 
 ##############################################################################
 # User signup/login/logout
@@ -216,6 +234,8 @@ def new_portfolio():
 def portfolio(port_id):
 
     portfolio = Portfolio.query.get_or_404(port_id)
+    net_worth = portfolio.update_net_worth()
+    portfolio.net_worth = net_worth
     return render_template('/portfolios/portfolio.html', portfolio=portfolio)
 
 

@@ -1,8 +1,36 @@
 from models import db, Stock, Portfolio, User
 from datetime import date, datetime
+from flask import Flask
+import dotenv
+import os
 
-db.drop_all()
-db.create_all()
+dotenv.load_dotenv()
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Important: Initialize the Flask application with the configuration
+db.init_app(app)
+
+# Create an application context
+with app.app_context():
+    try:
+        # Drop all tables (if any)
+        db.drop_all()
+
+        # Create the tables
+        db.create_all()
+
+        # Add your seeding logic here
+        # ...
+
+        # Commit the changes
+        db.session.commit()
+
+    except Exception as e:
+        # Rollback in case of error
+        db.session.rollback()
+        print(f"An error occurred: {e}")
 
 p1 = '654321'
 u1 = User(
@@ -325,7 +353,7 @@ s27 = Stock(
 )
 
 s28 = Stock(
-    symbol="AAPL",
+    symbol="APPL",
     price=152.74,
     quantity=15,
     portfolio_id=9
@@ -346,7 +374,7 @@ s30 = Stock(
 )
 
 s31 = Stock(
-    symbol="AAPL",
+    symbol="APPL",
     price=149.7,
     quantity=66,
     portfolio_id=10

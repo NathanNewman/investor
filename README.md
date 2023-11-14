@@ -1,4 +1,5 @@
-This project is called Investor. It's a competitive mock investor website designed using Python Flask and JavaScript JQuery. This is a class project for Springboard's Software Engineering Bootcamp.
+This project is called Investor. It's a competitive mock investor website designed using Python Flask and JavaScript JQuery. This is a class project for Springboard's Software Engineering Bootcamp. The project is deployed on Render at
+https://investor-klqu.onrender.com
 
 Investor gets stockmarket data from the free version of the Alpha Advantage API. When you first visit the
 site you will be taken to the leaderboard which shows the portfolios with the 10 highest net worths. Each
